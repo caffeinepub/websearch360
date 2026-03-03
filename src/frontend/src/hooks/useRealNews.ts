@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { MOCK_ARTICLES } from "../data/mockArticles";
 import type { Article, Category, Severity } from "../types/article";
 
 interface Rss2JsonItem {
@@ -26,12 +27,11 @@ interface Rss2JsonResponse {
 interface FeedConfig {
   url: string;
   category: Category;
-  sourceName: string; // explicit trusted source label
+  sourceName: string;
   filterKeywords?: string[];
 }
 
 // Trusted, real news sources only — no AI-generated content
-// Using rss2json.com free proxy to bypass CORS
 const FEEDS: FeedConfig[] = [
   // ---- POLITICS ----
   {
@@ -307,7 +307,85 @@ const FEEDS: FeedConfig[] = [
   },
 ];
 
-const RSS2JSON_BASE = "https://api.rss2json.com/v1/api.json";
+// Multiple proxy strategies — tried in order until one succeeds
+const RSS_PROXIES = [
+  // Strategy 1: rss2json.com — parses RSS to JSON natively
+  async (feedUrl: string): Promise<Rss2JsonItem[]> => {
+    const url = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedUrl)}&count=12`;
+    const res = await fetch(url, { signal: AbortSignal.timeout(10000) });
+    if (!res.ok) throw new Error(`rss2json HTTP ${res.status}`);
+    const data: Rss2JsonResponse = await res.json();
+    if (data.status !== "ok" || !data.items)
+      throw new Error("rss2json bad status");
+    return data.items;
+  },
+
+  // Strategy 2: allorigins.win — CORS proxy, returns raw XML we parse manually
+  async (feedUrl: string): Promise<Rss2JsonItem[]> => {
+    const url = `https://api.allorigins.win/raw?url=${encodeURIComponent(feedUrl)}`;
+    const res = await fetch(url, { signal: AbortSignal.timeout(10000) });
+    if (!res.ok) throw new Error(`allorigins HTTP ${res.status}`);
+    const xmlText = await res.text();
+    return parseRssXml(xmlText);
+  },
+
+  // Strategy 3: corsproxy.io
+  async (feedUrl: string): Promise<Rss2JsonItem[]> => {
+    const url = `https://corsproxy.io/?${encodeURIComponent(feedUrl)}`;
+    const res = await fetch(url, { signal: AbortSignal.timeout(10000) });
+    if (!res.ok) throw new Error(`corsproxy HTTP ${res.status}`);
+    const xmlText = await res.text();
+    return parseRssXml(xmlText);
+  },
+];
+
+/** Minimal RSS/Atom XML parser that extracts items without a DOM parser dependency */
+function parseRssXml(xml: string): Rss2JsonItem[] {
+  const items: Rss2JsonItem[] = [];
+  // Match <item>...</item> or <entry>...</entry>
+  const itemRegex = /<(?:item|entry)[\s>]([\s\S]*?)<\/(?:item|entry)>/gi;
+  let match: RegExpExecArray | null;
+  // biome-ignore lint/suspicious/noAssignInExpressions: regex loop pattern
+  while ((match = itemRegex.exec(xml)) !== null) {
+    const block = match[1];
+    const title = extractTag(block, "title");
+    const link =
+      extractTag(block, "link") || extractAttr(block, "link", "href");
+    const description =
+      extractTag(block, "description") ||
+      extractTag(block, "summary") ||
+      extractTag(block, "content:encoded");
+    const pubDate =
+      extractTag(block, "pubDate") ||
+      extractTag(block, "published") ||
+      extractTag(block, "updated") ||
+      extractTag(block, "dc:date");
+    const thumbnail =
+      extractAttr(block, "media:thumbnail", "url") ||
+      extractAttr(block, "media:content", "url");
+    if (title || link) {
+      items.push({ title, description, link, pubDate, thumbnail });
+    }
+  }
+  return items;
+}
+
+function extractTag(xml: string, tag: string): string {
+  const escapedTag = tag.replace(":", "\\:");
+  const regex = new RegExp(
+    `<${escapedTag}[^>]*>(?:<!\\[CDATA\\[)?([\\s\\S]*?)(?:\\]\\]>)?<\\/${escapedTag}>`,
+    "i",
+  );
+  const m = regex.exec(xml);
+  return m ? m[1].trim() : "";
+}
+
+function extractAttr(xml: string, tag: string, attr: string): string {
+  const escapedTag = tag.replace(":", "\\:");
+  const regex = new RegExp(`<${escapedTag}[^>]*\\s${attr}="([^"]*)"`, "i");
+  const m = regex.exec(xml);
+  return m ? m[1].trim() : "";
+}
 
 function decodeHtmlEntities(text: string): string {
   return text
@@ -377,33 +455,39 @@ async function fetchFeed(
   feedConfig: FeedConfig,
   feedIndex: number,
 ): Promise<Article[]> {
-  const apiUrl = `${RSS2JSON_BASE}?rss_url=${encodeURIComponent(feedConfig.url)}&count=12`;
-  const response = await fetch(apiUrl, { signal: AbortSignal.timeout(12000) });
-  if (!response.ok) throw new Error(`HTTP ${response.status}`);
-  const data: Rss2JsonResponse = await response.json();
-  if (data.status !== "ok" || !data.items) return [];
+  let items: Rss2JsonItem[] | null = null;
 
-  const items = feedConfig.filterKeywords
-    ? data.items.filter((item) => {
+  // Try each proxy in order until one works
+  for (const proxy of RSS_PROXIES) {
+    try {
+      items = await proxy(feedConfig.url);
+      if (items && items.length > 0) break;
+    } catch {
+      // try next proxy
+    }
+  }
+
+  if (!items || items.length === 0) return [];
+
+  const filtered = feedConfig.filterKeywords
+    ? items.filter((item) => {
         const text = `${item.title} ${item.description}`.toLowerCase();
         return feedConfig.filterKeywords!.some((kw) => text.includes(kw));
       })
-    : data.items;
+    : items;
 
-  return items.map((item, itemIndex): Article => {
+  return filtered.map((item, itemIndex): Article => {
     const headline = decodeHtmlEntities(item.title || "").trim();
     const rawSummary = stripHtml(decodeHtmlEntities(item.description || ""));
     const summary =
       rawSummary.length > 300 ? `${rawSummary.slice(0, 297)}...` : rawSummary;
 
-    // Use the explicit trusted source name from feed config
     const source = feedConfig.sourceName;
 
     const timestamp = item.pubDate
       ? new Date(item.pubDate).toISOString()
       : new Date().toISOString();
 
-    // Prefer enclosure image if it's explicitly an image type, then thumbnail
     const enclosureImg =
       item.enclosure?.type?.startsWith("image") &&
       isValidImageUrl(item.enclosure.link)
@@ -439,6 +523,7 @@ interface UseRealNewsResult {
   articles: Article[];
   isLoading: boolean;
   error: string | null;
+  isFallback: boolean;
   refetch: () => void;
 }
 
@@ -448,6 +533,7 @@ export function useRealNews({
   const [articles, setArticles] = useState<Article[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isFallback, setIsFallback] = useState(false);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const fetchAll = useCallback(async () => {
@@ -463,19 +549,19 @@ export function useRealNews({
       let successCount = 0;
 
       for (const result of results) {
-        if (result.status === "fulfilled") {
+        if (result.status === "fulfilled" && result.value.length > 0) {
           allArticles.push(...result.value);
           successCount++;
         }
-        // silently skip failed feeds
       }
 
-      if (successCount === 0) {
-        setError(
-          "Unable to load news feeds. Please check your connection and try again.",
-        );
-        setArticles([]);
+      if (successCount === 0 || allArticles.length === 0) {
+        // All proxies failed — fall back to sample articles so the page isn't empty
+        setIsFallback(true);
+        setError(null);
+        setArticles(MOCK_ARTICLES);
       } else {
+        setIsFallback(false);
         // Deduplicate by first 60 chars of headline
         const seen = new Set<string>();
         const unique = allArticles.filter((a) => {
@@ -494,8 +580,9 @@ export function useRealNews({
         setArticles(unique);
       }
     } catch (_err) {
-      setError("Failed to fetch news. Please try again.");
-      setArticles([]);
+      // Hard error — still show sample articles
+      setIsFallback(true);
+      setArticles(MOCK_ARTICLES);
     } finally {
       setIsLoading(false);
     }
@@ -517,5 +604,5 @@ export function useRealNews({
     };
   }, [fetchAll, refreshInterval]);
 
-  return { articles, isLoading, error, refetch: fetchAll };
+  return { articles, isLoading, error, isFallback, refetch: fetchAll };
 }

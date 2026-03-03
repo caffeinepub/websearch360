@@ -81,6 +81,7 @@ export default function App() {
   const {
     articles,
     isLoading: isRealLoading,
+    isFallback,
     refetch,
   } = useRealNews({
     refreshInterval: settings.refreshInterval,
@@ -207,6 +208,28 @@ export default function App() {
             />
           </div>
         </div>
+
+        {/* Fallback banner — shown when live feeds are unavailable */}
+        {isFallback && !isRealLoading && (
+          <div
+            className="mb-4 px-3 py-2 rounded-lg bg-yellow-500/10 border border-yellow-500/20 text-sm text-yellow-400 flex items-center gap-2"
+            data-ocid="news.fallback_state"
+          >
+            <span>⚠</span>
+            <span>
+              Live news feeds are temporarily unavailable. Showing sample
+              stories — tap refresh to try again.
+            </span>
+            <button
+              type="button"
+              onClick={handleRefresh}
+              className="ml-auto text-xs px-2 py-0.5 rounded bg-yellow-500/20 hover:bg-yellow-500/30 transition-colors font-medium"
+              data-ocid="news.fallback_refresh_button"
+            >
+              Retry
+            </button>
+          </div>
+        )}
 
         {/* Search results info */}
         {activeTab === "all" && searchQuery.trim() && (
