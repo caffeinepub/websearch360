@@ -1,0 +1,261 @@
+{
+  "kind": "build_request",
+  "title": "WebSearch360 — Full-Featured News Aggregator",
+  "projectName": "WebSearch360",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "text": "Implement a first-visit onboarding modal that collects the user's Name, Email, and an 'Enable Email Delivery Mode' checkbox. Store all values in localStorage. Display the explanation: 'We'll notify you by email only when a MAJOR disaster or catastrophic event occurs worldwide.' Do not show the modal on subsequent visits.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "On first visit, show a full-screen welcome modal asking for: User's Name, User's Email, A checkbox to Enable Email Delivery Mode"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Modal appears on first visit and is skipped on return visits (localStorage flag set)",
+        "Name, Email, and Email Delivery Mode values are persisted to localStorage",
+        "Explanation text is displayed inside the modal",
+        "Modal closes after submission and main app is visible"
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "text": "Build the app header with the 'WebSearch360' brand name accompanied by a globe/radar icon, a dark mode toggle button, and a settings gear icon that opens the settings panel.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "App name 'WebSearch360' with a globe/radar icon",
+          "Dark mode toggle button in header",
+          "Settings gear icon"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Header displays 'WebSearch360' and a globe/radar icon",
+        "Dark mode toggle switches between dark and light themes",
+        "Settings gear icon opens the settings slide-in panel"
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "text": "Implement top navigation tabs: ALL | Politics | National | International | Sports | War | Business | Technology | Science | Health | Entertainment | Weather. Switching tabs filters the displayed news cards to the selected category. The ALL tab shows every article combined.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "Top navigation tabs: ALL | Politics | National | International | Sports | War | Business | Technology | Science | Health | Entertainment | Weather"
+        ]
+      },
+      "acceptanceCriteria": [
+        "All 12 tabs are rendered and clickable",
+        "ALL tab displays articles from every category",
+        "Each category tab shows only articles tagged with that category",
+        "Active tab is visually highlighted"
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "text": "Add a search bar on the ALL tab. When the user types a query (e.g., 'Israel Iran war'), filter and display all matching articles across categories with matched keywords highlighted in the results.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "Search bar at the top — when user types something like 'Israel Iran war', it filters and displays ALL matching articles with highlighted keywords"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Search bar is visible on the ALL tab",
+        "Typing filters articles in real time",
+        "Matched keywords are visually highlighted in headline and summary",
+        "Clearing the search restores the full feed"
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "text": "Display a 'Live' badge showing last updated time on the main feed. Show a countdown timer labeled 'Next update in: XX:XX' that counts down to the next auto-refresh. Auto-refresh news data every 60 minutes (default) and show a loading spinner during refresh.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "'Live' badge showing last updated time",
+          "Auto-refresh every 60 minutes with a countdown timer showing 'Next update in: XX:XX'",
+          "Show a loading spinner when refreshing"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Live badge shows the last updated timestamp",
+        "Countdown timer decrements from the selected refresh interval",
+        "Data refresh is triggered when timer reaches zero",
+        "Loading spinner is displayed during the refresh cycle"
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "text": "Create news card components. Each card must include: a color-coded category badge, bold headline, 2–3 sentence summary, source name and publication timestamp, a 'Read More' button, a thumbnail image placeholder, and a red pulsing 'DISASTER' or 'BREAKING' badge for critical articles.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "Each news card should have: Category badge (color-coded per category), Headline (bold), Short summary/description, Source name + publication time, 'Read More' button, Disaster/Breaking badge for critical news (red pulsing badge), Thumbnail image placeholder"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Cards render all required fields",
+        "Category badge color matches the defined palette for each category",
+        "Breaking/Disaster articles show a red pulsing badge",
+        "Thumbnail placeholder is shown when no image is available"
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "text": "Generate at least 88 realistic mock news articles (8–10 per category) as the app's data source. Articles must include: real-sounding 2025–2026 headlines, 2–3 sentence summaries, varied sources (Reuters, AP, BBC, CNN, Al Jazeera, Fox News, ESPN, etc.), timestamps within the last 24 hours, a mix of regular and 'breaking' tagged articles, and at least 2–3 articles tagged as 'DISASTER' level (critical severity) for testing the email alert system. Use this mock data as the primary/fallback data source.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "Fallback to rich mock data with 8-10 articles per category (80+ total articles)",
+          "The mock data should be VERY realistic with actual current-sounding headlines from 2025-2026",
+          "At least 2-3 'DISASTER' level articles for testing email alerts"
+        ]
+      },
+      "acceptanceCriteria": [
+        "At least 88 articles exist across all 11 categories",
+        "Every article has headline, summary, source, timestamp, category, and severity fields",
+        "At least 2–3 articles are tagged severity: critical (DISASTER)",
+        "Timestamps are within 24 hours of a simulated 'now'",
+        "Multiple sources are represented"
+      ]
+    },
+    {
+      "id": "REQ-8",
+      "text": "Implement a horizontally scrolling breaking news ticker at the very top of the page displaying 10+ rotating breaking news headlines in a continuous loop.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "'Breaking News' ticker at the top scrolling horizontally",
+          "Scrolling ticker at top with 10+ breaking news headlines rotating"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Ticker is always visible at the top of the page",
+        "At least 10 headlines scroll in a continuous loop",
+        "Animation is smooth and continuous"
+      ]
+    },
+    {
+      "id": "REQ-9",
+      "text": "Build a slide-in settings panel (opens from the right side) containing: Dark Mode toggle, Email Delivery Mode toggle, Notification Sound toggle, Auto-refresh interval selector (30 min / 60 min / 2 hours), Font Size selector (Small / Medium / Large), Compact View toggle, Show Images toggle, per-category visibility checkboxes, editable Name and Email fields, and a 'Save Settings' button. Persist all settings to localStorage.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "Settings Panel (slide-in from right)",
+          "Dark Mode toggle",
+          "Email Delivery Mode toggle",
+          "Notification Sound toggle",
+          "Auto-refresh interval: 30 min / 60 min / 2 hours",
+          "Font Size: Small / Medium / Large",
+          "Compact View toggle",
+          "Show Images toggle",
+          "Categories to show (checkboxes to hide/show tabs)",
+          "Edit Name and Email fields",
+          "'Save Settings' button"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Panel slides in from the right when the gear icon is clicked",
+        "All settings controls are present and functional",
+        "Saving persists values to localStorage",
+        "Category visibility checkboxes hide/show the corresponding tabs",
+        "Font size and compact view changes are immediately reflected in the feed"
+      ]
+    },
+    {
+      "id": "REQ-10",
+      "text": "Implement the email alert simulation system. When Email Delivery Mode is enabled and a DISASTER-level article is detected (severity: critical), display an in-app notification banner: 'Email alert sent to [user@email.com] about: [headline]'. Disaster categories include earthquakes, tsunamis, nuclear events, major wars, and mass casualty events.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "If Email Delivery Mode is enabled, when a 'DISASTER' level article is detected (tagged with severity: critical), simulate sending an email alert",
+          "Show an in-app notification: 'Email alert sent to [user@email.com] about: [headline]'"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Notification banner appears when a critical article is loaded and Email Delivery Mode is on",
+        "Banner displays the user's email and the article headline",
+        "No notification is shown when Email Delivery Mode is off",
+        "Notification can be dismissed"
+      ]
+    },
+    {
+      "id": "REQ-11",
+      "text": "Apply a premium dark-mode-first glassmorphism UI theme. Default to dark mode with a toggle to light mode. Use neon cyan/blue accent colors. Apply the following category color coding — Politics: Purple, Sports: Green, War: Red, Technology: Cyan, Business: Gold, Health: Pink, Science: Orange, Entertainment: Magenta, National: Blue, International: Teal, Weather: Sky Blue. Include smooth animations on tab switch and card hover, subtle gradients, and glassmorphism card effects. Ensure full responsiveness across mobile and desktop breakpoints.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "Dark mode by default (toggle to light)",
+          "Modern, sleek dark UI with neon accent colors (cyan/blue)",
+          "Responsive — works on mobile and desktop",
+          "Smooth animations on tab switch, card hover",
+          "Heavy use of glassmorphism, subtle gradients, and smooth transitions"
+        ]
+      },
+      "acceptanceCriteria": [
+        "App defaults to dark mode on first load",
+        "Dark/light toggle switches theme globally",
+        "Category badges use the exact specified colors",
+        "Cards use glassmorphism styling (frosted glass effect with subtle borders)",
+        "Tab switch and card hover have smooth CSS transitions",
+        "Layout is usable on mobile (320px+) and desktop (1280px+)"
+      ]
+    }
+  ],
+  "constraints": [
+    "All data (mock articles, user preferences, settings) must be stored client-side in localStorage — no backend persistence required",
+    "Do not edit any files under frontend/src/hooks/ or frontend/src/components/ui",
+    "Use only the React + TypeScript + Tailwind CSS stack; no external UI libraries beyond what is already present",
+    "API key for NewsAPI should be a placeholder/environment variable; primary data source must be the mock data"
+  ],
+  "nonGoals": [
+    "Real email delivery (SMTP, SendGrid, etc.) — only in-app simulation",
+    "Backend Motoko canister logic — this is a pure frontend app",
+    "Internet Identity / authentication",
+    "Real-time WebSocket updates",
+    "Actual NewsAPI integration beyond a placeholder — mock data is the required fallback and primary source"
+  ],
+  "imageRequirements": {
+    "required": [
+      "Futuristic globe radar icon with neon cyan rings on a dark transparent background, suitable for a news app logo (globe-radar-icon.dim_128x128.png)",
+      "Dark glassmorphism news card thumbnail placeholder with subtle gradient and a faint camera icon centered (news-thumbnail-placeholder.dim_400x225.png)"
+    ],
+    "edits": []
+  }
+}

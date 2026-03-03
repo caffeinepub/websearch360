@@ -1,0 +1,4 @@
+{
+  "frontend/src/App.tsx": "Main application component that orchestrates all state (dark mode, settings, articles, tabs, search, alerts), renders the full page layout including ticker, header, tabs, news grid, footer, and settings panel, and handles auto-refresh and email alert detection logic.",
+  "frontend/src/components/SettingsPanel.tsx": "Slide-in settings panel component with all user preferences (dark mode, email delivery, notification sound, refresh interval, font size, compact view, show images, category visibility, name/email), localStorage persistence via exported loadSettings/saveSettings helpers, and a Save Settings button."
+}

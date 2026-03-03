@@ -1,0 +1,217 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-implement-a-first-visit-onboarding-modal-that-collects-the-user-s-name-email-and-an-enable-email-delivery-mode-checkbox-store-all-values-in-localstorage-display-the-explanation-we-ll-notify-you-by-email-only-when-a-major-disaster-or-catastrophic-event-occurs-worldwide-do-not-show-the-modal-on-subsequent-visits",
+      "featureTitle": "Implement a first-visit onboarding modal that collects the user's Name, Email, and an 'Enable Email Delivery Mode' checkbox. Store all values in localStorage. Display the explanation: 'We'll notify you by email only when a MAJOR disaster or catastrophic event occurs worldwide.' Do not show the modal on subsequent visits.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/OnboardingModal.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-1"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-build-the-app-header-with-the-websearch360-brand-name-accompanied-by-a-globe-radar-icon-a-dark-mode-toggle-button-and-a-settings-gear-icon-that-opens-the-settings-panel",
+      "featureTitle": "Build the app header with the 'WebSearch360' brand name accompanied by a globe/radar icon, a dark mode toggle button, and a settings gear icon that opens the settings panel.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/Header.tsx",
+        "frontend/src/index.css"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-2"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-top-navigation-tabs-all-politics-national-international-sports-war-business-technology-science-health-entertainment-weather-switching-tabs-filters-the-displayed-news-cards-to-the-selected-category-the-all-tab-shows-every-article-combined",
+      "featureTitle": "Implement top navigation tabs: ALL | Politics | National | International | Sports | War | Business | Technology | Science | Health | Entertainment | Weather. Switching tabs filters the displayed news cards to the selected category. The ALL tab shows every article combined.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/CategoryTabs.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-3"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-a-search-bar-on-the-all-tab-when-the-user-types-a-query-e-g-israel-iran-war-filter-and-display-all-matching-articles-across-categories-with-matched-keywords-highlighted-in-the-results",
+      "featureTitle": "Add a search bar on the ALL tab. When the user types a query (e.g., 'Israel Iran war'), filter and display all matching articles across categories with matched keywords highlighted in the results.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/SearchBar.tsx",
+        "frontend/src/utils/searchUtils.ts"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-4"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-display-a-live-badge-showing-last-updated-time-on-the-main-feed-show-a-countdown-timer-labeled-next-update-in-xx-xx-that-counts-down-to-the-next-auto-refresh-auto-refresh-news-data-every-60-minutes-default-and-show-a-loading-spinner-during-refresh",
+      "featureTitle": "Display a 'Live' badge showing last updated time on the main feed. Show a countdown timer labeled 'Next update in: XX:XX' that counts down to the next auto-refresh. Auto-refresh news data every 60 minutes (default) and show a loading spinner during refresh.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/LiveBadge.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-5"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-create-news-card-components-each-card-must-include-a-color-coded-category-badge-bold-headline-2-3-sentence-summary-source-name-and-publication-timestamp-a-read-more-button-a-thumbnail-image-placeholder-and-a-red-pulsing-disaster-or-breaking-badge-for-critical-articles",
+      "featureTitle": "Create news card components. Each card must include: a color-coded category badge, bold headline, 2–3 sentence summary, source name and publication timestamp, a 'Read More' button, a thumbnail image placeholder, and a red pulsing 'DISASTER' or 'BREAKING' badge for critical articles.",
+      "files": [
+        "frontend/src/components/NewsCard.tsx",
+        "frontend/src/types/article.ts"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-6"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-generate-at-least-88-realistic-mock-news-articles-8-10-per-category-as-the-app-s-data-source-articles-must-include-real-sounding-2025-2026-headlines-2-3-sentence-summaries-varied-sources-reuters-ap-bbc-cnn-al-jazeera-fox-news-espn-etc-timestamps-within-the-last-24-hours-a-mix-of-regular-and-breaking-tagged-articles-and-at-least-2-3-articles-tagged-as-disaster-level-critical-severity-for-testing-the-email-alert-system-use-this-mock-data-as-the-primary-fallback-data-source",
+      "featureTitle": "Generate at least 88 realistic mock news articles (8–10 per category) as the app's data source. Articles must include: real-sounding 2025–2026 headlines, 2–3 sentence summaries, varied sources (Reuters, AP, BBC, CNN, Al Jazeera, Fox News, ESPN, etc.), timestamps within the last 24 hours, a mix of regular and 'breaking' tagged articles, and at least 2–3 articles tagged as 'DISASTER' level (critical severity) for testing the email alert system. Use this mock data as the primary/fallback data source.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/data/mockArticles.ts"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-7"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-a-horizontally-scrolling-breaking-news-ticker-at-the-very-top-of-the-page-displaying-10-rotating-breaking-news-headlines-in-a-continuous-loop",
+      "featureTitle": "Implement a horizontally scrolling breaking news ticker at the very top of the page displaying 10+ rotating breaking news headlines in a continuous loop.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/NewsTicker.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-8"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-build-a-slide-in-settings-panel-opens-from-the-right-side-containing-dark-mode-toggle-email-delivery-mode-toggle-notification-sound-toggle-auto-refresh-interval-selector-30-min-60-min-2-hours-font-size-selector-small-medium-large-compact-view-toggle-show-images-toggle-per-category-visibility-checkboxes-editable-name-and-email-fields-and-a-save-settings-button-persist-all-settings-to-localstorage",
+      "featureTitle": "Build a slide-in settings panel (opens from the right side) containing: Dark Mode toggle, Email Delivery Mode toggle, Notification Sound toggle, Auto-refresh interval selector (30 min / 60 min / 2 hours), Font Size selector (Small / Medium / Large), Compact View toggle, Show Images toggle, per-category visibility checkboxes, editable Name and Email fields, and a 'Save Settings' button. Persist all settings to localStorage.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/SettingsPanel.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-9"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-the-email-alert-simulation-system-when-email-delivery-mode-is-enabled-and-a-disaster-level-article-is-detected-severity-critical-display-an-in-app-notification-banner-email-alert-sent-to-user-email-com-about-headline-disaster-categories-include-earthquakes-tsunamis-nuclear-events-major-wars-and-mass-casualty-events",
+      "featureTitle": "Implement the email alert simulation system. When Email Delivery Mode is enabled and a DISASTER-level article is detected (severity: critical), display an in-app notification banner: 'Email alert sent to [user@email.com] about: [headline]'. Disaster categories include earthquakes, tsunamis, nuclear events, major wars, and mass casualty events.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/EmailAlertBanner.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-10"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-apply-a-premium-dark-mode-first-glassmorphism-ui-theme-default-to-dark-mode-with-a-toggle-to-light-mode-use-neon-cyan-blue-accent-colors-apply-the-following-category-color-coding-politics-purple-sports-green-war-red-technology-cyan-business-gold-health-pink-science-orange-entertainment-magenta-national-blue-international-teal-weather-sky-blue-include-smooth-animations-on-tab-switch-and-card-hover-subtle-gradients-and-glassmorphism-card-effects-ensure-full-responsiveness-across-mobile-and-desktop-breakpoints",
+      "featureTitle": "Apply a premium dark-mode-first glassmorphism UI theme. Default to dark mode with a toggle to light mode. Use neon cyan/blue accent colors. Apply the following category color coding — Politics: Purple, Sports: Green, War: Red, Technology: Cyan, Business: Gold, Health: Pink, Science: Orange, Entertainment: Magenta, National: Blue, International: Teal, Weather: Sky Blue. Include smooth animations on tab switch and card hover, subtle gradients, and glassmorphism card effects. Ensure full responsiveness across mobile and desktop breakpoints.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/index.css",
+        "frontend/tailwind.config.js"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-11"
+      ],
+      "confidence": "high"
+    }
+  ]
+}

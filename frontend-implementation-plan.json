@@ -1,0 +1,266 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "WebSearch360 — Full-Featured News Aggregator Frontend",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "summary": "Implement first-visit onboarding modal with Name, Email, and Email Delivery Mode checkbox stored in localStorage",
+      "acceptanceCriteria": [
+        "Modal appears on first visit and is skipped on return visits (localStorage flag set)",
+        "Name, Email, and Email Delivery Mode values are persisted to localStorage",
+        "Explanation text is displayed inside the modal",
+        "Modal closes after submission and main app is visible"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/OnboardingModal.tsx",
+          "operation": "create",
+          "description": "Create a full-screen modal component that collects Name, Email, and 'Enable Email Delivery Mode' checkbox on first visit. Display explanation: 'We'll notify you by email only when a MAJOR disaster or catastrophic event occurs worldwide.' Store values in localStorage with keys 'userName', 'userEmail', 'emailDeliveryMode', and 'hasCompletedOnboarding'. Close modal after submission."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Import and render OnboardingModal. Check localStorage for 'hasCompletedOnboarding' flag. Show modal conditionally on first visit, then render main app content after dismissal."
+        }
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "summary": "Build app header with WebSearch360 branding, globe/radar icon, dark mode toggle, and settings gear icon",
+      "acceptanceCriteria": [
+        "Header displays 'WebSearch360' and a globe/radar icon",
+        "Dark mode toggle switches between dark and light themes",
+        "Settings gear icon opens the settings slide-in panel"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/Header.tsx",
+          "operation": "create",
+          "description": "Create header component displaying 'WebSearch360' brand name with the generated globe-radar-icon (reference frontend/public/assets/generated/globe-radar-icon.dim_128x128.png). Include a dark mode toggle button (moon/sun icon) and a settings gear icon. Emit events or call callbacks to toggle theme and open settings panel."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Import and render Header component. Implement dark mode state management (dark/light class on root element or context). Wire settings gear icon click to open SettingsPanel."
+        },
+        {
+          "path": "frontend/src/index.css",
+          "operation": "modify",
+          "description": "Add CSS custom properties and base styles for dark and light themes. Include glassmorphism utilities, neon cyan/blue accent colors, and smooth transition rules."
+        }
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "summary": "Implement top navigation tabs for 12 categories (ALL, Politics, National, International, Sports, War, Business, Technology, Science, Health, Entertainment, Weather) with active tab highlighting and category filtering",
+      "acceptanceCriteria": [
+        "All 12 tabs are rendered and clickable",
+        "ALL tab displays articles from every category",
+        "Each category tab shows only articles tagged with that category",
+        "Active tab is visually highlighted"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/CategoryTabs.tsx",
+          "operation": "create",
+          "description": "Create a horizontal tab navigation component with 12 tabs: ALL, Politics, National, International, Sports, War, Business, Technology, Science, Health, Entertainment, Weather. Manage active tab state. Emit category selection events. Apply active tab highlighting with smooth CSS transitions."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Import and render CategoryTabs. Manage selectedCategory state. Filter displayed articles based on selected tab (ALL shows all categories, others filter by category)."
+        }
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "summary": "Add search bar on ALL tab that filters articles in real time with keyword highlighting",
+      "acceptanceCriteria": [
+        "Search bar is visible on the ALL tab",
+        "Typing filters articles in real time",
+        "Matched keywords are visually highlighted in headline and summary",
+        "Clearing the search restores the full feed"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/SearchBar.tsx",
+          "operation": "create",
+          "description": "Create a search input component that filters articles as the user types. Emit search query changes. Include clear button to reset search."
+        },
+        {
+          "path": "frontend/src/utils/searchUtils.ts",
+          "operation": "create",
+          "description": "Create utility functions to filter articles by search query (matching headline, summary, source) and highlight matched keywords in text by wrapping them in a span with highlight styling."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Conditionally render SearchBar when ALL tab is active. Manage searchQuery state. Apply search filter to articles using searchUtils before rendering. Pass highlighted text to NewsCard components."
+        }
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "summary": "Display Live badge with last updated timestamp, countdown timer for next auto-refresh, and loading spinner during refresh cycles",
+      "acceptanceCriteria": [
+        "Live badge shows the last updated timestamp",
+        "Countdown timer decrements from the selected refresh interval",
+        "Data refresh is triggered when timer reaches zero",
+        "Loading spinner is displayed during the refresh cycle"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/LiveBadge.tsx",
+          "operation": "create",
+          "description": "Create a badge component displaying 'Live' indicator with last updated timestamp and countdown timer showing 'Next update in: MM:SS'. Use interval state from settings (default 60 minutes). Decrement timer every second. Emit refresh event when timer reaches zero."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Import and render LiveBadge. Manage lastUpdated timestamp and isRefreshing loading state. Show loading spinner overlay when isRefreshing is true. Trigger data refresh when LiveBadge emits refresh event. Update lastUpdated after refresh completes."
+        }
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "summary": "Create news card components with category badge, headline, summary, source, timestamp, Read More button, thumbnail, and breaking/disaster badges",
+      "acceptanceCriteria": [
+        "Cards render all required fields",
+        "Category badge color matches the defined palette for each category",
+        "Breaking/Disaster articles show a red pulsing badge",
+        "Thumbnail placeholder is shown when no image is available"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/NewsCard.tsx",
+          "operation": "create",
+          "description": "Create a glassmorphism news card component displaying: color-coded category badge, bold headline, 2-3 sentence summary, source name and timestamp, 'Read More' button, thumbnail image (use frontend/public/assets/generated/news-thumbnail-placeholder.dim_400x225.png when no image provided), and red pulsing 'DISASTER' or 'BREAKING' badge for articles with severity: critical or breaking: true. Apply smooth hover animations. Use category-specific colors: Politics-Purple, Sports-Green, War-Red, Technology-Cyan, Business-Gold, Health-Pink, Science-Orange, Entertainment-Magenta, National-Blue, International-Teal, Weather-SkyBlue."
+        },
+        {
+          "path": "frontend/src/types/article.ts",
+          "operation": "create",
+          "description": "Define TypeScript interfaces for Article with fields: id, category, headline, summary, source, timestamp, severity, breaking, imageUrl, and externalUrl."
+        }
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "summary": "Generate 88+ realistic mock news articles as primary data source with varied categories, sources, timestamps, and disaster-level articles for testing",
+      "acceptanceCriteria": [
+        "At least 88 articles exist across all 11 categories",
+        "Every article has headline, summary, source, timestamp, category, and severity fields",
+        "At least 2-3 articles are tagged severity: critical (DISASTER)",
+        "Timestamps are within 24 hours of a simulated 'now'",
+        "Multiple sources are represented"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/data/mockArticles.ts",
+          "operation": "create",
+          "description": "Generate at least 88 realistic mock articles (8-10 per category: Politics, National, International, Sports, War, Business, Technology, Science, Health, Entertainment, Weather). Include real-sounding 2025-2026 headlines, 2-3 sentence summaries, varied sources (Reuters, AP, BBC, CNN, Al Jazeera, Fox News, ESPN, Bloomberg, Nature, WHO, Variety, Weather Channel), timestamps within last 24 hours, mix of regular and breaking articles, and at least 2-3 articles tagged severity: 'critical' (major earthquakes, nuclear events, mass casualty wars). Export as MOCK_ARTICLES array."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Import MOCK_ARTICLES as the primary data source. Initialize articles state with MOCK_ARTICLES on component mount. Use this data for all filtering, search, and display operations."
+        }
+      ]
+    },
+    {
+      "id": "REQ-8",
+      "summary": "Implement horizontally scrolling breaking news ticker at the top displaying 10+ rotating headlines",
+      "acceptanceCriteria": [
+        "Ticker is always visible at the top of the page",
+        "At least 10 headlines scroll in a continuous loop",
+        "Animation is smooth and continuous"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/NewsTicker.tsx",
+          "operation": "create",
+          "description": "Create a breaking news ticker component that displays 10+ headlines in a continuous horizontal scroll loop. Use CSS animations for smooth infinite scrolling. Filter articles tagged with breaking: true. Position at the very top of the page above the header."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Import and render NewsTicker at the top of the app layout above Header. Pass breaking articles as props."
+        }
+      ]
+    },
+    {
+      "id": "REQ-9",
+      "summary": "Build slide-in settings panel with all user preferences, category visibility toggles, and localStorage persistence",
+      "acceptanceCriteria": [
+        "Panel slides in from the right when the gear icon is clicked",
+        "All settings controls are present and functional",
+        "Saving persists values to localStorage",
+        "Category visibility checkboxes hide/show the corresponding tabs",
+        "Font size and compact view changes are immediately reflected in the feed"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/SettingsPanel.tsx",
+          "operation": "create",
+          "description": "Create a slide-in panel component (from right) containing: Dark Mode toggle, Email Delivery Mode toggle, Notification Sound toggle, Auto-refresh interval selector (30 min / 60 min / 2 hours), Font Size selector (Small / Medium / Large), Compact View toggle, Show Images toggle, per-category visibility checkboxes for all 11 categories, editable Name and Email fields, and 'Save Settings' button. Load initial values from localStorage. On save, persist all settings to localStorage with keys: 'darkMode', 'emailDeliveryMode', 'notificationSound', 'refreshInterval', 'fontSize', 'compactView', 'showImages', 'visibleCategories', 'userName', 'userEmail'. Emit settings change events."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Import and conditionally render SettingsPanel based on isSettingsOpen state. Toggle panel visibility when Header settings icon is clicked. Apply settings changes globally: update theme, refresh interval, font size class, compact view class, image visibility, and filter visible tabs based on visibleCategories array."
+        }
+      ]
+    },
+    {
+      "id": "REQ-10",
+      "summary": "Implement email alert simulation for disaster-level articles with in-app notification banner",
+      "acceptanceCriteria": [
+        "Notification banner appears when a critical article is loaded and Email Delivery Mode is on",
+        "Banner displays the user's email and the article headline",
+        "No notification is shown when Email Delivery Mode is off",
+        "Notification can be dismissed"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/EmailAlertBanner.tsx",
+          "operation": "create",
+          "description": "Create a dismissible notification banner component that displays: 'Email alert sent to [user@email.com] about: [headline]'. Accept email and headline as props. Include dismiss button. Apply attention-grabbing styling."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Check emailDeliveryMode setting from localStorage. When articles are loaded or refreshed, detect any with severity: 'critical'. If emailDeliveryMode is enabled, show EmailAlertBanner for each critical article detected. Read userEmail from localStorage to display in banner. Manage banner visibility and dismissal state."
+        }
+      ]
+    },
+    {
+      "id": "REQ-11",
+      "summary": "Apply premium dark-mode-first glassmorphism UI with neon accents, category color coding, smooth animations, and full responsiveness",
+      "acceptanceCriteria": [
+        "App defaults to dark mode on first load",
+        "Dark/light toggle switches theme globally",
+        "Category badges use the exact specified colors",
+        "Cards use glassmorphism styling (frosted glass effect with subtle borders)",
+        "Tab switch and card hover have smooth CSS transitions",
+        "Layout is usable on mobile (320px+) and desktop (1280px+)"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/index.css",
+          "operation": "modify",
+          "description": "Define CSS custom properties for dark and light themes with neon cyan/blue accents. Add glassmorphism utilities (backdrop-blur, semi-transparent backgrounds, subtle borders, shadow effects). Define category color variables: Politics-Purple, Sports-Green, War-Red, Technology-Cyan, Business-Gold, Health-Pink, Science-Orange, Entertainment-Magenta, National-Blue, International-Teal, Weather-SkyBlue. Add smooth transition rules for theme switch, tab switch, card hover. Set dark mode as default. Include responsive breakpoints for mobile (320px+) and desktop (1280px+)."
+        },
+        {
+          "path": "frontend/tailwind.config.js",
+          "operation": "modify",
+          "description": "Extend Tailwind config with custom colors for categories and neon accents. Add glassmorphism utilities. Configure dark mode class strategy. Define responsive breakpoints. Add animation utilities for smooth transitions and pulsing effects."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Apply dark mode class to root element by default. Toggle dark/light class based on settings. Apply fontSize and compactView classes globally based on user settings. Ensure responsive layout with mobile-first approach."
+        }
+      ]
+    }
+  ]
+}
