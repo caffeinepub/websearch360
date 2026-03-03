@@ -1,0 +1,434 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --radius: 0.5rem;
+
+    /* Light mode */
+    --background: 0.97 0.005 240;
+    --foreground: 0.15 0.02 240;
+    --card: 1 0 0;
+    --card-foreground: 0.15 0.02 240;
+    --popover: 1 0 0;
+    --popover-foreground: 0.15 0.02 240;
+    --primary: 0.6 0.2 220;
+    --primary-foreground: 1 0 0;
+    --secondary: 0.93 0.01 240;
+    --secondary-foreground: 0.2 0.02 240;
+    --muted: 0.93 0.01 240;
+    --muted-foreground: 0.5 0.02 240;
+    --accent: 0.93 0.01 240;
+    --accent-foreground: 0.2 0.02 240;
+    --destructive: 0.577 0.245 27.325;
+    --destructive-foreground: 1 0 0;
+    --border: 0.88 0.01 240;
+    --input: 0.88 0.01 240;
+    --ring: 0.6 0.2 220;
+
+    /* Neon accent */
+    --neon-cyan: 0.82 0.18 195;
+    --neon-blue: 0.65 0.22 250;
+
+    /* Category colors */
+    --cat-politics: 0.55 0.22 290;
+    --cat-sports: 0.55 0.18 145;
+    --cat-war: 0.55 0.22 25;
+    --cat-technology: 0.75 0.18 195;
+    --cat-business: 0.75 0.15 75;
+    --cat-health: 0.65 0.2 340;
+    --cat-science: 0.65 0.2 55;
+    --cat-entertainment: 0.6 0.25 320;
+    --cat-national: 0.55 0.2 240;
+    --cat-international: 0.6 0.18 175;
+    --cat-weather: 0.65 0.18 210;
+  }
+
+  .dark {
+    --background: 0.1 0.015 240;
+    --foreground: 0.95 0.01 240;
+    --card: 0.14 0.015 240;
+    --card-foreground: 0.95 0.01 240;
+    --popover: 0.16 0.015 240;
+    --popover-foreground: 0.95 0.01 240;
+    --primary: 0.75 0.2 195;
+    --primary-foreground: 0.1 0.015 240;
+    --secondary: 0.2 0.015 240;
+    --secondary-foreground: 0.95 0.01 240;
+    --muted: 0.2 0.015 240;
+    --muted-foreground: 0.6 0.01 240;
+    --accent: 0.22 0.02 240;
+    --accent-foreground: 0.95 0.01 240;
+    --destructive: 0.65 0.22 25;
+    --destructive-foreground: 1 0 0;
+    --border: 1 0 0 / 10%;
+    --input: 1 0 0 / 12%;
+    --ring: 0.75 0.2 195;
+
+    /* Neon accent */
+    --neon-cyan: 0.82 0.2 195;
+    --neon-blue: 0.7 0.22 250;
+
+    /* Category colors - brighter for dark mode */
+    --cat-politics: 0.65 0.25 290;
+    --cat-sports: 0.65 0.2 145;
+    --cat-war: 0.65 0.25 25;
+    --cat-technology: 0.82 0.2 195;
+    --cat-business: 0.8 0.18 75;
+    --cat-health: 0.72 0.22 340;
+    --cat-science: 0.75 0.22 55;
+    --cat-entertainment: 0.7 0.28 320;
+    --cat-national: 0.65 0.22 240;
+    --cat-international: 0.7 0.2 175;
+    --cat-weather: 0.75 0.2 210;
+  }
+
+  * {
+    @apply border-border;
+    box-sizing: border-box;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: "Inter", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: "Space Grotesk", sans-serif;
+  }
+}
+
+@layer utilities {
+  /* Glassmorphism */
+  .glass {
+    background: oklch(var(--card) / 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid oklch(var(--border));
+  }
+
+  .glass-strong {
+    background: oklch(var(--card) / 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid oklch(var(--border));
+  }
+
+  .glass-dark {
+    background: oklch(0.12 0.015 240 / 0.9);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid oklch(1 0 0 / 0.08);
+  }
+
+  /* Neon glow effects */
+  .neon-glow {
+    box-shadow: 0 0 20px oklch(var(--neon-cyan) / 0.3), 0 0 40px
+      oklch(var(--neon-cyan) / 0.1);
+  }
+
+  .neon-text {
+    color: oklch(var(--neon-cyan));
+    text-shadow: 0 0 10px oklch(var(--neon-cyan) / 0.5);
+  }
+
+  /* Scrollbar */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: oklch(var(--muted-foreground) / 0.3);
+    border-radius: 2px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: oklch(var(--muted-foreground) / 0.5);
+  }
+
+  /* Font sizes */
+  .font-size-small {
+    font-size: 0.875rem;
+  }
+  .font-size-medium {
+    font-size: 1rem;
+  }
+  .font-size-large {
+    font-size: 1.125rem;
+  }
+
+  /* Compact view */
+  .compact-view .news-card-summary {
+    display: none;
+  }
+  .compact-view .news-card-image {
+    display: none;
+  }
+  .compact-view .news-card {
+    padding: 0.75rem;
+  }
+}
+
+/* Breaking news ticker animation */
+@keyframes ticker-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.ticker-track {
+  display: flex;
+  animation: ticker-scroll 60s linear infinite;
+  width: max-content;
+}
+
+.ticker-track:hover {
+  animation-play-state: paused;
+}
+
+/* Pulse animation for disaster badge */
+@keyframes disaster-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    box-shadow: 0 0 0 0 oklch(0.65 0.25 25 / 0.7);
+  }
+  50% {
+    opacity: 0.85;
+    box-shadow: 0 0 0 6px oklch(0.65 0.25 25 / 0);
+  }
+}
+
+.disaster-pulse {
+  animation: disaster-pulse 1.5s ease-in-out infinite;
+}
+
+/* Smooth transitions */
+.tab-transition {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-hover {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px oklch(var(--neon-cyan) / 0.12);
+  border-color: oklch(var(--neon-cyan) / 0.3);
+}
+
+/* Settings panel slide-in */
+@keyframes slide-in-right {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slide-out-right {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+.settings-panel-enter {
+  animation: slide-in-right 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.settings-panel-exit {
+  animation: slide-out-right 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Onboarding modal */
+@keyframes modal-appear {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.modal-appear {
+  animation: modal-appear 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Loading spinner */
+@keyframes spin-glow {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.spin-glow {
+  animation: spin-glow 0.8s linear infinite;
+}
+
+/* Alert banner slide down */
+@keyframes alert-slide-down {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.alert-slide-down {
+  animation: alert-slide-down 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Gradient backgrounds */
+.bg-grid-pattern {
+  background-image: linear-gradient(oklch(1 0 0 / 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, oklch(1 0 0 / 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* Highlight for search */
+.search-highlight {
+  background: oklch(var(--neon-cyan) / 0.25);
+  color: oklch(var(--neon-cyan));
+  border-radius: 2px;
+  padding: 0 2px;
+  font-weight: 600;
+}
+
+/* Category badge colors */
+.badge-politics {
+  background: oklch(var(--cat-politics) / 0.15);
+  color: oklch(var(--cat-politics));
+  border-color: oklch(var(--cat-politics) / 0.3);
+}
+.badge-sports {
+  background: oklch(var(--cat-sports) / 0.15);
+  color: oklch(var(--cat-sports));
+  border-color: oklch(var(--cat-sports) / 0.3);
+}
+.badge-war {
+  background: oklch(var(--cat-war) / 0.15);
+  color: oklch(var(--cat-war));
+  border-color: oklch(var(--cat-war) / 0.3);
+}
+.badge-technology {
+  background: oklch(var(--cat-technology) / 0.15);
+  color: oklch(var(--cat-technology));
+  border-color: oklch(var(--cat-technology) / 0.3);
+}
+.badge-business {
+  background: oklch(var(--cat-business) / 0.15);
+  color: oklch(var(--cat-business));
+  border-color: oklch(var(--cat-business) / 0.3);
+}
+.badge-health {
+  background: oklch(var(--cat-health) / 0.15);
+  color: oklch(var(--cat-health));
+  border-color: oklch(var(--cat-health) / 0.3);
+}
+.badge-science {
+  background: oklch(var(--cat-science) / 0.15);
+  color: oklch(var(--cat-science));
+  border-color: oklch(var(--cat-science) / 0.3);
+}
+.badge-entertainment {
+  background: oklch(var(--cat-entertainment) / 0.15);
+  color: oklch(var(--cat-entertainment));
+  border-color: oklch(var(--cat-entertainment) / 0.3);
+}
+.badge-national {
+  background: oklch(var(--cat-national) / 0.15);
+  color: oklch(var(--cat-national));
+  border-color: oklch(var(--cat-national) / 0.3);
+}
+.badge-international {
+  background: oklch(var(--cat-international) / 0.15);
+  color: oklch(var(--cat-international));
+  border-color: oklch(var(--cat-international) / 0.3);
+}
+.badge-weather {
+  background: oklch(var(--cat-weather) / 0.15);
+  color: oklch(var(--cat-weather));
+  border-color: oklch(var(--cat-weather) / 0.3);
+}
+
+/* Tab active indicator */
+.tab-active-politics {
+  border-bottom-color: oklch(var(--cat-politics));
+  color: oklch(var(--cat-politics));
+}
+.tab-active-sports {
+  border-bottom-color: oklch(var(--cat-sports));
+  color: oklch(var(--cat-sports));
+}
+.tab-active-war {
+  border-bottom-color: oklch(var(--cat-war));
+  color: oklch(var(--cat-war));
+}
+.tab-active-technology {
+  border-bottom-color: oklch(var(--cat-technology));
+  color: oklch(var(--cat-technology));
+}
+.tab-active-business {
+  border-bottom-color: oklch(var(--cat-business));
+  color: oklch(var(--cat-business));
+}
+.tab-active-health {
+  border-bottom-color: oklch(var(--cat-health));
+  color: oklch(var(--cat-health));
+}
+.tab-active-science {
+  border-bottom-color: oklch(var(--cat-science));
+  color: oklch(var(--cat-science));
+}
+.tab-active-entertainment {
+  border-bottom-color: oklch(var(--cat-entertainment));
+  color: oklch(var(--cat-entertainment));
+}
+.tab-active-national {
+  border-bottom-color: oklch(var(--cat-national));
+  color: oklch(var(--cat-national));
+}
+.tab-active-international {
+  border-bottom-color: oklch(var(--cat-international));
+  color: oklch(var(--cat-international));
+}
+.tab-active-weather {
+  border-bottom-color: oklch(var(--cat-weather));
+  color: oklch(var(--cat-weather));
+}
+.tab-active-all {
+  border-bottom-color: oklch(var(--neon-cyan));
+  color: oklch(var(--neon-cyan));
+}

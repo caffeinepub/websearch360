@@ -1,19 +1,37 @@
-# Specification
+# WebSearch360
 
-## Summary
-**Goal:** Build a full-featured, client-side news aggregator called WebSearch360 with a premium glassmorphism dark UI, category tabs, mock article data, email alert simulation, and user settings — all persisted in localStorage.
+## Current State
 
-**Planned changes:**
-- First-visit onboarding modal collecting Name, Email, and Email Delivery Mode checkbox; stored in localStorage and skipped on return visits
-- App header with "WebSearch360" brand name, globe/radar icon, dark mode toggle, and settings gear icon
-- Top navigation tabs: ALL | Politics | National | International | Sports | War | Business | Technology | Science | Health | Entertainment | Weather — filtering news cards by category
-- Search bar on ALL tab with real-time keyword filtering and matched keyword highlighting in headlines and summaries
-- Horizontally scrolling breaking news ticker at the top with 10+ rotating headlines in a continuous loop
-- News card components with color-coded category badge, bold headline, 2–3 sentence summary, source name, timestamp, "Read More" button, thumbnail image placeholder, and red pulsing BREAKING/DISASTER badge for critical articles
-- At least 88 realistic mock articles (8–10 per category, 2025–2026 headlines, varied sources, timestamps within 24 hours, 2–3 tagged as severity: critical / DISASTER)
-- Live badge showing last updated time and countdown timer "Next update in: XX:XX" with auto-refresh every 60 minutes (default) and a loading spinner during refresh
-- Slide-in settings panel from the right with: dark mode toggle, email delivery mode toggle, notification sound toggle, auto-refresh interval selector (30 min / 60 min / 2 hours), font size selector (Small / Medium / Large), compact view toggle, show images toggle, per-category visibility checkboxes, editable name and email fields, and a Save Settings button — all persisted to localStorage
-- Email alert simulation: when Email Delivery Mode is on and a DISASTER-level article is detected, show a dismissible in-app notification banner "Email alert sent to [email] about: [headline]"
-- Premium dark-mode-first glassmorphism UI with neon cyan/blue accents, per-category color coding (Politics: Purple, Sports: Green, War: Red, Technology: Cyan, Business: Gold, Health: Pink, Science: Orange, Entertainment: Magenta, National: Blue, International: Teal, Weather: Sky Blue), smooth tab-switch and card-hover animations, and full responsiveness for mobile and desktop
+WebSearch360 is a news aggregator frontend app. Currently:
+- All articles are hardcoded fake/mock data in `data/mockArticles.ts` — no real news
+- `externalUrl` is undefined on all mock articles, making "Read More" buttons non-functional (they link to `"#"`)
+- Images are placeholder-generated assets, not real news thumbnails
+- An email alert feature exists in the UI but email is a disabled feature on this account
+- The `handleRefresh` function just re-renders the same mock data
 
-**User-visible outcome:** Users can browse, search, and filter realistic mock news articles across 12 categories in a sleek dark glassmorphism interface, configure display and notification preferences, and receive simulated email alert banners for critical disaster-level events.
+## Requested Changes (Diff)
+
+### Add
+- A real news fetching system using free public RSS-to-JSON APIs (e.g. `rss2json.com` or `allorigins` proxy to parse major RSS feeds from BBC, Reuters, AP, CNN, etc.)
+- Real article images pulled from the RSS feed's `enclosure` or `thumbnail` fields
+- Working `externalUrl` on every article pointing to the real source article
+- A `useRealNews` hook that fetches from multiple RSS feeds, parses them into the `Article` type, and supports category mapping
+- Auto-refresh that fetches fresh data instead of reloading mocks
+
+### Modify
+- `App.tsx`: Replace `MOCK_ARTICLES` import and state initialization with `useRealNews` hook; refresh calls real fetch
+- `data/mockArticles.ts`: Keep only `BREAKING_TICKER_HEADLINES` (used by ticker), remove article mocks or replace with empty fallback
+- Remove email alert banner and email-related UI (EmailAlertBanner component usage, alert state, email delivery logic) since email is disabled
+- `NewsCard.tsx`: Ensure "Read More" always opens in new tab and the link is always valid (use `article.externalUrl` directly, never fall back to `"#"`)
+
+### Remove
+- Email alert banner UI and all associated state (`alerts`, `shownAlertIds`, email delivery logic) from `App.tsx`
+- `EmailAlertBanner` component import/usage
+
+## Implementation Plan
+
+1. Create `src/hooks/useRealNews.ts` — fetches multiple RSS feeds via `https://api.rss2json.com/v1/api.json?rss_url=<url>` (free tier, no key needed), maps feed items to `Article` type including real `imageUrl` and `externalUrl`, covers all categories (politics, national, international, sports, war, business, technology, science, health, entertainment, weather)
+2. Update `App.tsx` to use `useRealNews` hook, remove mock article imports, remove email alert logic and `EmailAlertBanner` usage
+3. Update `data/mockArticles.ts` to only export `BREAKING_TICKER_HEADLINES` 
+4. Update `NewsCard.tsx` to never use `"#"` as href — if no URL, hide the Read More button entirely
+5. Validate and build
